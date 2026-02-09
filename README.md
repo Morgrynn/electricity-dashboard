@@ -152,8 +152,14 @@ The backend container connects to the host DB via
 This runs **frontend (nginx)** and **backend** in Docker.
 The database still comes from the provided repository.
 
+Windows / macOS
 ```bash
 docker compose -f docker-compose.full.yml up --build -d
+```
+
+Linux
+```bash
+docker compose -f docker-compose.full.yml -f docker-compose.linux.yml up --build -d
 ```
 
 Verify backend:
@@ -226,5 +232,5 @@ pnpm check           # lint + test + build
 pnpm verify          # lint + test + e2e 
 ```
 
----
+---https://github.com/Morgrynn/electricity-dashboard.git
 
