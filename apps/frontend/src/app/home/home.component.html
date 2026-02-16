@@ -1,0 +1,173 @@
+<main class="page">
+  <header class="page__header">
+    <div class="page__title">
+      <h1>Electricity Dashboard</h1>
+      <p>Daily statistics</p>
+    </div>
+
+    <div class="page__status">
+      @if (metaVm$ | async; as vm) {
+        <div class="chips">
+          <span class="chip">DB: {{ vm.db }}</span>
+          <span class="chip">Table: {{ vm.table }}</span>
+          <span class="chip">Rows: {{ vm.rowCount }}</span>
+        </div>
+      } @else {
+        <div class="status-loading">Loading DB status…</div>
+      }
+    </div>
+  </header>
+
+  <section class="card filters">
+    <div class="filters__row">
+      <label class="field">
+        <span class="field__label">Date from</span>
+        <input
+          class="field__control"
+          type="date"
+          [value]="dateFrom()"
+          (change)="onDateFrom($any($event.target).value)"
+        />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Date to</span>
+        <input
+          class="field__control"
+          type="date"
+          [value]="dateTo()"
+          (change)="onDateTo($any($event.target).value)"
+        />
+      </label>
+
+      <label class="field field--wide">
+        <span class="field__label">Search (YYYY / YYYY-MM / YYYY-MM-DD)</span>
+        <input
+          class="field__control"
+          type="text"
+          placeholder="e.g. 2024-01"
+          [value]="qInput()"
+          (input)="onSearchInput($any($event.target).value)"
+        />
+      </label>
+
+      <label class="field">
+        <span class="field__label">Page size</span>
+        <select
+          class="field__control"
+          [value]="pageSize()"
+          (change)="onPageSize($any($event.target).value)"
+        >
+          <option [value]="20">20</option>
+          <option [value]="50">50</option>
+          <option [value]="100">100</option>
+        </select>
+      </label>
+
+      <button class="btn btn--secondary filters__reset" (click)="reset()">Reset</button>
+    </div>
+
+    @if (searchError() || dateRangeError()) {
+      <div class="filters__error">
+        {{ searchError() || dateRangeError() }}
+      </div>
+    }
+  </section>
+
+  <section class="content">
+    @if (vm$ | async; as vm) {
+      @if (vm.error) {
+        <div class="card error">
+          <strong>Failed to load daily stats.</strong>
+          <div class="error__message">{{ vm.error }}</div>
+        </div>
+      } @else {
+        <div class="table-wrap card">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="table__left">
+                  <button class="sort" (click)="toggleSort('date')">
+                    Date {{ sortIndicator('date') }}
+                  </button>
+                </th>
+
+                <th class="table__right">
+                  <button class="sort" (click)="toggleSort('totalConsumptionMWh')">
+                    Consumption (MWh) {{ sortIndicator('totalConsumptionMWh') }}
+                  </button>
+                </th>
+
+                <th class="table__right">
+                  <button class="sort" (click)="toggleSort('totalProductionMWh')">
+                    Production (MWh) {{ sortIndicator('totalProductionMWh') }}
+                  </button>
+                </th>
+
+                <th class="table__right">
+                  <button class="sort" (click)="toggleSort('avgPriceEurPerMWh')">
+                    Avg price (€/MWh) {{ sortIndicator('avgPriceEurPerMWh') }}
+                  </button>
+                </th>
+
+                <th class="table__right">
+                  <button class="sort" (click)="toggleSort('longestNegativePriceStreakHours')">
+                    Negative streak (h) {{ sortIndicator('longestNegativePriceStreakHours') }}
+                  </button>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @if (vm.data.items.length === 0) {
+                <tr>
+                  <td class="table__empty" colspan="5">No results for selected filters.</td>
+                </tr>
+              } @else {
+                @for (row of vm.data.items; track row.date) {
+                  <tr>
+                    <td class="table__left">{{ row.date }}</td>
+                    <td class="table__right">{{ row.totalConsumptionMWh | number: '1.0-2' }}</td>
+                    <td class="table__right">{{ row.totalProductionMWh | number: '1.0-2' }}</td>
+                    <td class="table__right">
+                      {{
+                        row.avgPriceEurPerMWh != null
+                          ? (row.avgPriceEurPerMWh | number: '1.0-3')
+                          : '—'
+                      }}
+                    </td>
+                    <td class="table__right">{{ row.longestNegativePriceStreakHours }}</td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pager">
+          <div class="pager__meta">Total: {{ vm.data.totalItems }} days</div>
+
+          <div class="pager__controls">
+            <button class="btn btn--secondary" (click)="prevPage()" [disabled]="page() <= 1">
+              Prev
+            </button>
+
+            <span class="pager__text">
+              Page {{ vm.data.page }} / {{ vm.data.totalPages || 1 }}
+            </span>
+
+            <button
+              class="btn btn--secondary"
+              (click)="nextPage(vm.data.totalPages)"
+              [disabled]="page() >= (vm.data.totalPages || 1)"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      }
+    } @else {
+      <p class="loading">Loading daily statistics…</p>
+    }
+  </section>
+</main>
