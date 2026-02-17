@@ -12,4 +12,3 @@ export class DailyStatsService {
     return this.repo.findDailyStats(query);
   }
 }
-

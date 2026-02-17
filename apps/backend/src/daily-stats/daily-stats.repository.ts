@@ -132,7 +132,7 @@ export class DailyStatsRepository {
     };
   }
 
-  private sortOrder(sort: DailyStatsQuery['sort'] | 'date'): {
+  private sortOrder(sort: DailyStatsQuery['sort']): {
     expr: string;
     nulls?: 'NULLS LAST' | 'NULLS FIRST';
   } {

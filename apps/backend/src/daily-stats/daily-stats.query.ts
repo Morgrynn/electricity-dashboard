@@ -50,7 +50,9 @@ export class DailyStatsQuery {
   dateTo?: string;
 
   @IsOptional()
-  @Transform(({ value }) => (typeof value === 'string' ? value.trim() : value))
+  @Transform(({ value }: { value: unknown }) =>
+    typeof value === 'string' ? value.trim() : undefined,
+  )
   @IsString()
   @MaxLength(10)
   @Matches(/^\d{4}(-\d{2}){0,2}$/, {
