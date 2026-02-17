@@ -141,6 +141,18 @@
   overflow: auto;
 }
 
+.table-legend {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.table-legend__item strong {
+  font-weight: 600;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;

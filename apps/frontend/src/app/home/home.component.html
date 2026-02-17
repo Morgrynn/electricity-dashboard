@@ -83,6 +83,11 @@
         </div>
       } @else {
         <div class="table-wrap card">
+          <div class="table-legend">
+            <span class="table-legend__item">
+              <strong>N/A</strong> = missing in source data (no hourly values available)
+            </span>
+          </div>
           <table class="table">
             <thead>
               <tr>
@@ -93,7 +98,11 @@
                 </th>
 
                 <th class="table__right">
-                  <button class="sort" (click)="toggleSort('totalConsumptionMWh')">
+                  <button
+                    class="sort"
+                    (click)="toggleSort('totalConsumptionMWh')"
+                    title="N/A means consumption data is missing in the dataset for that day (all 24 hours are NULL)."
+                  >
                     Consumption (MWh) {{ sortIndicator('totalConsumptionMWh') }}
                   </button>
                 </th>
@@ -127,13 +136,19 @@
                 @for (row of vm.data.items; track row.date) {
                   <tr>
                     <td class="table__left">{{ row.date }}</td>
-                    <td class="table__right">{{ row.totalConsumptionMWh | number: '1.0-2' }}</td>
+                    <td class="table__right">
+                      {{
+                        row.totalConsumptionMWh != null
+                          ? (row.totalConsumptionMWh | number: '1.0-2')
+                          : 'N/A'
+                      }}
+                    </td>
                     <td class="table__right">{{ row.totalProductionMWh | number: '1.0-2' }}</td>
                     <td class="table__right">
                       {{
                         row.avgPriceEurPerMWh != null
                           ? (row.avgPriceEurPerMWh | number: '1.0-3')
-                          : '—'
+                          : 'N/A'
                       }}
                     </td>
                     <td class="table__right">{{ row.longestNegativePriceStreakHours }}</td>
