@@ -42,11 +42,11 @@ export class DailyStatsRepository {
     const dataSql = `
       WITH base AS (
         SELECT
-          date::date                      AS day,
-          starttime                       AS start_time,
-          COALESCE(productionamount, 0)   AS production_mwh,
-          COALESCE(consumptionamount, 0)  AS consumption_kwh,
-          hourlyprice                     AS price
+          date::date                           AS day,
+          starttime                            AS start_time,
+          SUM(COALESCE(productionamount, 0))   AS production_mwh,
+          SUM(consumptionamount)               AS consumption_kwh,
+          AVG(hourlyprice)                     AS price
         FROM electricitydata
         WHERE 1=1
           AND ($1::date IS NULL OR date >= $1::date)
@@ -55,6 +55,7 @@ export class DailyStatsRepository {
             $3::text IS NULL
             OR to_char(date, 'YYYY-MM-DD') LIKE $3::text || '%'
           )
+        GROUP BY date::date, starttime
       ),
       neg_groups AS (
         SELECT
@@ -115,7 +116,10 @@ export class DailyStatsRepository {
     return {
       items: dataRows.map((r) => ({
         date: r.date,
-        totalConsumptionMWh: Number(r.totalConsumptionMWh),
+        totalConsumptionMWh:
+          r.totalConsumptionMWh === null || r.totalConsumptionMWh === undefined
+            ? null
+            : Number(r.totalConsumptionMWh),
         totalProductionMWh: Number(r.totalProductionMWh),
         avgPriceEurPerMWh:
           r.avgPriceEurPerMWh === null || r.avgPriceEurPerMWh === undefined
@@ -141,7 +145,7 @@ export class DailyStatsRepository {
         return { expr: 'd.day' };
 
       case 'totalConsumptionMWh':
-        return { expr: 'd.total_consumption_mwh' };
+        return { expr: 'd.total_consumption_mwh', nulls: 'NULLS LAST' };
 
       case 'totalProductionMWh':
         return { expr: 'd.total_production_mwh' };
