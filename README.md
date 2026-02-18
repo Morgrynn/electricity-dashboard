@@ -15,8 +15,8 @@ production, consumption, and price data based on the provided Fingrid dataset.
 
 electricity-dashboard/
 ├─ apps/
-│  ├─ backend/        # NestJS 
-│  ├─ frontend/       # Angular 
+│  ├─ backend/        # NestJS
+│  ├─ frontend/       # Angular
 │  └─ e2e/            # Playwright
 ├─ docker-compose.app.yml        # backend only
 ├─ docker-compose.full.yml       # frontend + backend
@@ -24,7 +24,7 @@ electricity-dashboard/
 ├─ package.json
 └─ README.md
 
-````
+```
 
 ## Prerequisites
 
@@ -38,7 +38,7 @@ Required for local development:
 node -v
 pnpm -v
 docker -v
-````
+```
 
 ---
 
@@ -58,12 +58,12 @@ docker compose up --build --renew-anon-volumes -d
 
 ### Adminer
 
-* URL: [http://localhost:8088/](http://localhost:8088/)
-* System: PostgreSQL
-* Server: `postgres`
-* Username: `academy`
-* Password: `academy`
-* Database: `electricity`
+- URL: [http://localhost:8088/](http://localhost:8088/)
+- System: PostgreSQL
+- Server: `postgres`
+- Username: `academy`
+- Password: `academy`
+- Database: `electricity`
 
 ### Database connection
 
@@ -103,8 +103,8 @@ pnpm dev:backend
 
 Endpoints:
 
-* Health: [http://localhost:3000/api/health](http://localhost:3000/api/health)
-* DB meta: [http://localhost:3000/api/meta](http://localhost:3000/api/meta)
+- Health: [http://localhost:3000/api/health](http://localhost:3000/api/health)
+- DB meta: [http://localhost:3000/api/meta](http://localhost:3000/api/meta)
 
 ---
 
@@ -114,8 +114,8 @@ Endpoints:
 pnpm dev:frontend
 ```
 
-* URL: [http://localhost:4200/](http://localhost:4200/)
-* Angular dev proxy forwards `/api/*` → backend
+- URL: [http://localhost:4200/](http://localhost:4200/)
+- Angular dev proxy forwards `/api/*` → backend
 
 ---
 
@@ -153,11 +153,13 @@ This runs **frontend (nginx)** and **backend** in Docker.
 The database still comes from the provided repository.
 
 Windows / macOS
+
 ```bash
 docker compose -f docker-compose.full.yml up --build -d
 ```
 
 Linux
+
 ```bash
 docker compose -f docker-compose.full.yml -f docker-compose.linux.yml up --build -d
 ```
@@ -171,7 +173,7 @@ curl http://localhost:3000/api/meta
 
 Open frontend:
 
-* [http://localhost:4200/](http://localhost:4200/)
+- [http://localhost:4200/](http://localhost:4200/)
 
 The frontend nginx container proxies `/api/*` to the backend container.
 
@@ -205,9 +207,9 @@ pnpm e2e
 
 The smoke test verifies:
 
-* frontend loads
-* backend connectivity works
-* DB metadata is rendered
+- frontend loads
+- backend connectivity works
+- DB metadata is rendered
 
 ### View Playwright report
 
@@ -229,8 +231,7 @@ pnpm format          # format with Prettier
 pnpm test            # unit tests
 pnpm e2e             # end-to-end tests
 pnpm check           # lint + test + build
-pnpm verify          # lint + test + e2e 
+pnpm verify          # lint + test + e2e
 ```
 
 ---https://github.com/Morgrynn/electricity-dashboard.git
-

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MetaResponse } from './api.types';
+import { DailyStat, DailyStatsQuery, MetaResponse, PagedResponse } from './api.types';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -9,5 +9,16 @@ export class ApiService {
 
   getMeta(): Observable<MetaResponse> {
     return this.http.get<MetaResponse>('/api/meta');
+  }
+
+  getDailyStats(query: DailyStatsQuery): Observable<PagedResponse<DailyStat>> {
+    let params = new HttpParams();
+
+    for (const [key, value] of Object.entries(query)) {
+      if (value === undefined || value === null || value === '') continue;
+      params = params.set(key, String(value));
+    }
+
+    return this.http.get<PagedResponse<DailyStat>>('/api/daily-stats', { params });
   }
 }
