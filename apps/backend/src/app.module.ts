@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DbModule } from './db/db.module';
+import { DbModule } from './common/db/db.module';
 import { HealthController } from './health.controller';
 import { MetaController } from './meta/meta.controller';
 import { DailyStatsModule } from './daily-stats/daily-stats.module';
+import { DaysModule } from './days/days.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { DailyStatsModule } from './daily-stats/daily-stats.module';
     }),
     DbModule,
     DailyStatsModule,
+    DaysModule,
   ],
   controllers: [HealthController, MetaController],
 })

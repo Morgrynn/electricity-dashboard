@@ -4,6 +4,7 @@ import { ApiService } from '../api/api.service';
 import { DailyStat, PagedResponse } from '../api/api.types';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { catchError, map, of, switchMap, distinctUntilChanged, debounceTime } from 'rxjs';
+import { RouterLink } from '@angular/router';
 
 type SortKey =
   | 'date'
@@ -56,7 +57,7 @@ function isValidIsoDate(date: string): boolean {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

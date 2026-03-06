@@ -1,11 +1,11 @@
 :host {
   display: block;
-  height: 100vh;
+  min-height: 100vh;
   box-sizing: border-box;
 }
 
 .page {
-  height: 100%;
+  min-height: 100%;
   padding: 24px;
   max-width: 1200px;
   margin: 0 auto;
@@ -83,7 +83,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  align-items: end;
+  align-items: flex-end;
 }
 
 .filters__reset {
@@ -183,6 +183,16 @@
 
 .table__left {
   text-align: left;
+}
+
+.table__left .link {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+  }
 }
 
 .table__right {
