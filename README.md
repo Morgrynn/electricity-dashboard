@@ -233,5 +233,3 @@ pnpm e2e             # end-to-end tests
 pnpm check           # lint + test + build
 pnpm verify          # lint + test + e2e
 ```
-
----https://github.com/Morgrynn/electricity-dashboard.git
