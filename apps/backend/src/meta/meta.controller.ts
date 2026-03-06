@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { DbService } from '../db/db.service';
+import { DbService } from '../common/db/db.service';
 
 @Controller('meta')
 export class MetaController {

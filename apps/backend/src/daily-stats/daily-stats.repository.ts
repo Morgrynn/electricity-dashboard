@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DbService } from '../db/db.service';
+import { DbService } from '../common/db/db.service';
 import { DailyStatsQuery } from './daily-stats.query';
 import { DailyStats } from './daily-stats.model';
 import { PagedResponse } from '../common/pagination/paged-response.model';
