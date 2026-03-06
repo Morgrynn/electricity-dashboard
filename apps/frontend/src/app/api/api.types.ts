@@ -34,3 +34,27 @@ export interface DailyStatsQuery {
   dateTo?: string;
   q?: string;
 }
+
+export type CheapestHour = {
+  startTime: string;
+  price: number | null;
+  rank: number;
+};
+
+export type MaxConsumptionVsProductionHour = {
+  startTime: string;
+  consumptionMinusProductionMWh: number;
+  consumptionMWh: number;
+  productionMWh: number;
+  price: number | null;
+};
+
+export type DaySummary = {
+  date: string;
+  totalConsumptionMWh: number;
+  totalProductionMWh: number;
+  avgPriceEurPerMWh: number | null;
+  longestNegativeStreakHours: number;
+  maxConsumptionVsProductionHour: MaxConsumptionVsProductionHour | null;
+  cheapestHours: CheapestHour[];
+};

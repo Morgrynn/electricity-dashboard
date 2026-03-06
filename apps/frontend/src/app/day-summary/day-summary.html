@@ -1,0 +1,118 @@
+<main class="page">
+  <header class="page__header">
+    <div class="page__title">
+      <h1>Electricity Dashboard</h1>
+
+      @if (summary$ | async; as s) {
+        <p>Day summary — {{ s.date }}</p>
+      } @else {
+        <p>Day summary</p>
+      }
+    </div>
+
+    <div class="page__status">
+      <a class="btn btn--secondary link" routerLink="/">Back</a>
+    </div>
+  </header>
+
+  @if (summary$ | async; as s) {
+    <section class="content">
+      <section class="card summary">
+        <div class="summary__grid">
+          <div class="card metric">
+            <div class="metric__label">Consumption (MWh)</div>
+            <div class="metric__value">
+              {{
+                s.totalConsumptionMWh != null ? (s.totalConsumptionMWh | number: '1.0-2') : 'N/A'
+              }}
+            </div>
+          </div>
+
+          <div class="card metric">
+            <div class="metric__label">Production (MWh)</div>
+            <div class="metric__value">
+              {{ s.totalProductionMWh | number: '1.0-2' }}
+            </div>
+          </div>
+
+          <div class="card metric">
+            <div class="metric__label">Average price (€/MWh)</div>
+            <div class="metric__value">
+              {{ s.avgPriceEurPerMWh != null ? (s.avgPriceEurPerMWh | number: '1.0-3') : 'N/A' }}
+            </div>
+          </div>
+
+          <div class="card metric">
+            <div class="metric__label">Negative price streak (hours)</div>
+            <div class="metric__value">{{ s.longestNegativeStreakHours }}</div>
+
+            <div class="metric__hint">
+              <div class="metric__hint-label">Hour with highest production surplus</div>
+
+              @if (s.maxConsumptionVsProductionHour) {
+                <div class="metric__hint-main">
+                  {{ formatHour(s.maxConsumptionVsProductionHour.startTime) }}
+                  <span class="metric__hint-separator">—</span>
+                  Surplus
+                  {{
+                    s.maxConsumptionVsProductionHour.productionMWh -
+                      s.maxConsumptionVsProductionHour.consumptionMWh | number: '1.0-2'
+                  }}
+                  MWh
+                </div>
+
+                <div class="metric__hint-meta">
+                  C {{ s.maxConsumptionVsProductionHour.consumptionMWh | number: '1.0-2' }} · P
+                  {{ s.maxConsumptionVsProductionHour.productionMWh | number: '1.0-2' }}
+                </div>
+              } @else {
+                <div class="metric__hint-main">N/A</div>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card cheapest">
+        <h3 class="section-title">Cheapest hours</h3>
+
+        <ul class="cheapest__list">
+          @for (h of s.cheapestHours; track h.startTime) {
+            <li class="cheapest__item">
+              <span class="cheapest__rank">#{{ h.rank }}</span>
+
+              <span class="cheapest__time">
+                {{ formatHour(h.startTime) }}
+              </span>
+
+              <span class="cheapest__price" [class.is-negative]="(h.price ?? 0) < 0">
+                {{ h.price != null ? (h.price | number: '1.0-3') : 'N/A' }} €/MWh
+
+                @if (h.price != null) {
+                  <span
+                    class="tooltip"
+                    tabindex="0"
+                    [attr.aria-label]="
+                      h.price < 0
+                        ? 'Negative hourly price: supply exceeded demand, so the market price fell below zero.'
+                        : 'Positive hourly price: demand remained high enough relative to supply for the market price to stay above zero.'
+                    "
+                    [attr.title]="
+                      h.price < 0
+                        ? 'Negative hourly price: supply exceeded demand, so the market price fell below zero.'
+                        : 'Positive hourly price: demand remained high enough relative to supply for the market price to stay above zero.'
+                    "
+                  >
+                    ⓘ
+                  </span>
+                }
+              </span>
+            </li>
+          }
+        </ul>
+      </section>
+    </section>
+  } @else {
+    <p class="loading">Loading day summary…</p>
+  }
+</main>

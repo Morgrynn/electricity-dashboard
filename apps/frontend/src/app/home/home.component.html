@@ -135,7 +135,9 @@
               } @else {
                 @for (row of vm.data.items; track row.date) {
                   <tr>
-                    <td class="table__left">{{ row.date }}</td>
+                    <td class="table__left">
+                      <a class="link" [routerLink]="['/day', row.date]">{{ row.date }}</a>
+                    </td>
                     <td class="table__right">
                       {{
                         row.totalConsumptionMWh != null
