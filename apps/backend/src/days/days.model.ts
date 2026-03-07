@@ -21,3 +21,10 @@ export type CheapestHour = {
   price: number | null;
   rank: number;
 };
+
+export type DayHour = {
+  startTime: string;
+  consumptionMWh: number | null;
+  productionMWh: number | null;
+  priceEurPerMWh: number | null;
+};
