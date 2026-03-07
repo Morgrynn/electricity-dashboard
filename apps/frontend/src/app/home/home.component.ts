@@ -4,7 +4,7 @@ import { ApiService } from '../api/api.service';
 import { DailyStat, PagedResponse } from '../api/api.types';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { catchError, map, of, switchMap, distinctUntilChanged, debounceTime } from 'rxjs';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 type SortKey =
   | 'date'
@@ -64,6 +64,7 @@ function isValidIsoDate(date: string): boolean {
 export class HomeComponent {
   private readonly api = inject(ApiService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
 
   readonly page = signal(1);
   readonly pageSize = signal(20);
@@ -234,6 +235,10 @@ export class HomeComponent {
   nextPage(totalPages: number) {
     if (totalPages <= 0) return;
     this.page.set(Math.min(totalPages, this.page() + 1));
+  }
+
+  openDay(date: string): void {
+    void this.router.navigate(['/day', date]);
   }
 
   reset() {
