@@ -134,9 +134,17 @@
                 </tr>
               } @else {
                 @for (row of vm.data.items; track row.date) {
-                  <tr>
+                  <tr
+                    class="table__row-link"
+                    (click)="openDay(row.date)"
+                  >
                     <td class="table__left">
-                      <a class="link" [routerLink]="['/day', row.date]">{{ row.date }}</a>
+                      <a
+                        class="link"
+                        [routerLink]="['/day', row.date]"
+                        (click)="$event.stopPropagation()"
+                        >{{ row.date }}</a
+                      >
                     </td>
                     <td class="table__right">
                       {{

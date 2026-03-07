@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DailyStat, DailyStatsQuery, DaySummary, MetaResponse, PagedResponse } from './api.types';
+import {
+  DailyStat,
+  DailyStatsQuery,
+  DaySummary,
+  MetaResponse,
+  PagedResponse,
+  DayHour,
+} from './api.types';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -24,5 +31,9 @@ export class ApiService {
 
   getDaySummary(date: string): Observable<DaySummary> {
     return this.http.get<DaySummary>(`/api/days/${date}/summary`);
+  }
+
+  getDayHours(date: string): Observable<DayHour[]> {
+    return this.http.get<DayHour[]>(`/api/days/${date}/hours`);
   }
 }

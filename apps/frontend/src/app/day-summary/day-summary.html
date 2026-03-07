@@ -11,7 +11,7 @@
     </div>
 
     <div class="page__status">
-      <a class="btn btn--secondary link" routerLink="/">Back</a>
+      <button class="btn btn--secondary" type="button" (click)="goBack()">Back</button>
     </div>
   </header>
 
@@ -73,12 +73,40 @@
         </div>
       </section>
 
+      @if (hours$ | async; as hours) {
+        <app-day-charts
+          [hours]="hours"
+          [selectedHourStartTime]="selectedHourStartTime()"
+        ></app-day-charts>
+      }
+
       <section class="card cheapest">
-        <h3 class="section-title">Cheapest hours</h3>
+        <div class="cheapest__header">
+          <h3 class="section-title">Cheapest hours</h3>
+
+          @if (selectedHourStartTime()) {
+            <button
+              class="btn btn--secondary cheapest__clear"
+              type="button"
+              (click)="clearSelectedHour()"
+            >
+              Clear highlight
+            </button>
+          }
+        </div>
 
         <ul class="cheapest__list">
           @for (h of s.cheapestHours; track h.startTime) {
-            <li class="cheapest__item">
+            <li
+              class="cheapest__item cheapest__item--interactive"
+              [class.is-selected]="selectedHourStartTime() === h.startTime"
+              (click)="selectHour(h.startTime)"
+              (keydown.enter)="selectHour(h.startTime)"
+              (keydown.space)="selectHour(h.startTime); $event.preventDefault()"
+              role="button"
+              tabindex="0"
+              [attr.aria-pressed]="selectedHourStartTime() === h.startTime"
+            >
               <span class="cheapest__rank">#{{ h.rank }}</span>
 
               <span class="cheapest__time">
@@ -92,6 +120,7 @@
                   <span
                     class="tooltip"
                     tabindex="0"
+                    (click)="$event.stopPropagation()"
                     [attr.aria-label]="
                       h.price < 0
                         ? 'Negative hourly price: supply exceeded demand, so the market price fell below zero.'

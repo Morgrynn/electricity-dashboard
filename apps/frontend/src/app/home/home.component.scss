@@ -1,11 +1,11 @@
 :host {
   display: block;
-  min-height: 100vh;
+  height: 100vh;
   box-sizing: border-box;
 }
 
 .page {
-  min-height: 100%;
+  height: 100%;
   padding: 24px;
   max-width: 1200px;
   margin: 0 auto;
@@ -188,15 +188,23 @@
 .table__left .link {
   text-decoration: none;
   color: inherit;
-
-  &:hover,
-  &:focus-visible {
-    text-decoration: underline;
-  }
 }
 
 .table__right {
   text-align: right;
+}
+
+.table__row-link {
+  cursor: pointer;
+
+  &:hover {
+    background: #efefef;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #bbb;
+    outline-offset: -2px;
+  }
 }
 
 .table__empty {

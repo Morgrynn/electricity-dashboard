@@ -42,14 +42,14 @@ test.describe('electricity dashboard smoke', () => {
     await expect(page.getByText('Cheapest hours')).toBeVisible();
   });
 
-  test('back link returns from day summary to home', async ({ page }) => {
+  test('back button returns from day summary to home', async ({ page }) => {
     await page.goto('/');
 
     const firstDayLink = page.locator('a[href^="/day/"]').first();
     await firstDayLink.click();
 
-    await expect(page.getByRole('link', { name: /back/i })).toBeVisible();
-    await page.getByRole('link', { name: /back/i }).click();
+    await expect(page.getByRole('button', { name: /back/i })).toBeVisible();
+    await page.getByRole('button', { name: /back/i }).click();
 
     await expect(page).toHaveURL(/\/$/);
     await expect(page.getByRole('heading', { name: 'Electricity Dashboard' })).toBeVisible();

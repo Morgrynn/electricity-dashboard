@@ -58,3 +58,10 @@ export type DaySummary = {
   maxConsumptionVsProductionHour: MaxConsumptionVsProductionHour | null;
   cheapestHours: CheapestHour[];
 };
+
+export type DayHour = {
+  startTime: string;
+  consumptionMWh: number | null;
+  productionMWh: number | null;
+  priceEurPerMWh: number | null;
+};
