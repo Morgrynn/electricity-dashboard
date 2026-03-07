@@ -14,7 +14,7 @@ type StreakRow = {
 };
 
 type MaxConsumptionVsProductionRow = {
-  startTime: string;
+  startTime: Date | string;
   consumptionMinusProductionMWh: string;
   consumptionMWh: string;
   productionMWh: string;
@@ -22,7 +22,7 @@ type MaxConsumptionVsProductionRow = {
 };
 
 type CheapestRow = {
-  startTime: string;
+  startTime: Date | string;
   price: string | null;
   rank: number | string;
 };
@@ -50,7 +50,10 @@ export class DaysRepository {
 
     const totalSql = `
       SELECT
-        SUM(COALESCE(consumptionamount,0))/1000.0 AS "totalConsumptionMWh",
+        CASE
+          WHEN COUNT(consumptionamount) = 0 THEN NULL
+          ELSE SUM(consumptionamount) / 1000.0
+        END AS "totalConsumptionMWh",
         SUM(COALESCE(productionamount,0))         AS "totalProductionMWh",
         AVG(hourlyprice) FILTER (WHERE hourlyprice IS NOT NULL) AS "avgPriceEurPerMWh"
       FROM electricitydata
@@ -82,7 +85,7 @@ export class DaysRepository {
 
     const maxConsumptionVsProductionSql = `
       SELECT
-        to_char(starttime, 'YYYY-MM-DD"T"HH24:MI:SS') AS "startTime",
+        starttime AS "startTime",
         COALESCE(productionamount,0)         AS "productionMWh",
         COALESCE(consumptionamount,0)/1000.0 AS "consumptionMWh",
         hourlyprice                          AS "price",
@@ -96,7 +99,7 @@ export class DaysRepository {
     const cheapestSql = `
       WITH ranked AS (
         SELECT
-          to_char(starttime, 'YYYY-MM-DD"T"HH24:MI:SS') AS "startTime",
+          starttime AS "startTime",
           hourlyprice AS "price",
           ROW_NUMBER() OVER (ORDER BY hourlyprice ASC, starttime ASC) AS "rank"
         FROM electricitydata
@@ -135,7 +138,10 @@ export class DaysRepository {
 
       maxConsumptionVsProductionHour: mv
         ? {
-            startTime: mv.startTime,
+            startTime:
+              mv.startTime instanceof Date
+                ? mv.startTime.toISOString()
+                : new Date(mv.startTime).toISOString(),
             consumptionMinusProductionMWh: Number(
               mv.consumptionMinusProductionMWh,
             ),
@@ -146,7 +152,10 @@ export class DaysRepository {
         : null,
 
       cheapestHours: cheapestRows.map((r) => ({
-        startTime: r.startTime,
+        startTime:
+          r.startTime instanceof Date
+            ? r.startTime.toISOString()
+            : new Date(r.startTime).toISOString(),
         price: toNumNullable(r.price),
         rank: Number(r.rank),
       })),
