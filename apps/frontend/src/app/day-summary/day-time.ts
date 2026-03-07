@@ -4,5 +4,7 @@ export function formatHourHelsinki(value: string): string {
     hour: '2-digit',
     minute: '2-digit',
     hourCycle: 'h23',
-  }).format(new Date(value));
+  })
+    .format(new Date(value))
+    .replace('.', ':');
 }

@@ -1,8 +1,21 @@
+import { Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 import { ApiService } from '../api/api.service';
+import { DayHour } from '../api/api.types';
+import { DayChartsComponent } from './day-charts';
 import { DaySummaryComponent } from './day-summary';
+
+@Component({
+  selector: 'app-day-charts',
+  standalone: true,
+  template: '',
+})
+class DayChartsStubComponent {
+  @Input() hours: DayHour[] = [];
+  @Input() selectedHourStartTime: string | null = null;
+}
 
 describe('DaySummaryComponent', () => {
   let component: DaySummaryComponent;
@@ -31,10 +44,20 @@ describe('DaySummaryComponent', () => {
                 maxConsumptionVsProductionHour: null,
                 cheapestHours: [],
               }),
+            getDayHours: () => of([]),
           },
         },
       ],
-    }).compileComponents();
+    })
+      .overrideComponent(DaySummaryComponent, {
+        remove: {
+          imports: [DayChartsComponent],
+        },
+        add: {
+          imports: [DayChartsStubComponent],
+        },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(DaySummaryComponent);
     component = fixture.componentInstance;
