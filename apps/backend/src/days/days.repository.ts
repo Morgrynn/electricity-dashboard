@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DbService } from '../common/db/db.service';
-import { DaySummary } from './days.model';
+import { DaySummary, DayHour } from './days.model';
 import { toNum0, toNumNullable } from '../common/db/db-mapper';
 
 type TotalsRow = {
@@ -25,6 +25,13 @@ type CheapestRow = {
   startTime: string;
   price: string | null;
   rank: number | string;
+};
+
+type DayHourRow = {
+  startTime: Date | string;
+  consumptionMWh: string | number | null;
+  productionMWh: string | number | null;
+  priceEurPerMWh: string | number | null;
 };
 
 @Injectable()
@@ -144,5 +151,41 @@ export class DaysRepository {
         rank: Number(r.rank),
       })),
     };
+  }
+
+  async getDayHours(dateStr: string): Promise<DayHour[] | null> {
+    const rows = await this.db.query<DayHourRow>(
+      `
+        SELECT
+          starttime AS "startTime",
+          CASE
+            WHEN consumptionamount IS NULL THEN NULL
+            ELSE consumptionamount / 1000.0
+          END AS "consumptionMWh",
+          productionamount AS "productionMWh",
+          hourlyprice AS "priceEurPerMWh"
+        FROM electricitydata
+        WHERE "date" = $1::date
+        ORDER BY starttime ASC
+      `,
+      [dateStr],
+    );
+
+    if (!rows.length) {
+      return null;
+    }
+
+    return rows.map((row) => ({
+      startTime:
+        row.startTime instanceof Date
+          ? row.startTime.toISOString()
+          : new Date(row.startTime).toISOString(),
+      consumptionMWh:
+        row.consumptionMWh === null ? null : Number(row.consumptionMWh),
+      productionMWh:
+        row.productionMWh === null ? null : Number(row.productionMWh),
+      priceEurPerMWh:
+        row.priceEurPerMWh === null ? null : Number(row.priceEurPerMWh),
+    }));
   }
 }
