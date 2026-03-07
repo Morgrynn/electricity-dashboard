@@ -1,0 +1,19 @@
+<div class="charts-grid">
+  <section class="card charts">
+    <h3 class="section-title">Hourly price</h3>
+
+    <div class="chart-wrap">
+      <canvas baseChart [type]="'line'" [data]="priceChartData" [options]="priceChartOptions">
+      </canvas>
+    </div>
+  </section>
+
+  <section class="card charts">
+    <h3 class="section-title">Hourly production vs consumption</h3>
+
+    <div class="chart-wrap">
+      <canvas baseChart [type]="'line'" [data]="energyChartData" [options]="energyChartOptions">
+      </canvas>
+    </div>
+  </section>
+</div>
