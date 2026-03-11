@@ -2,3 +2,13 @@ services:
   backend:
     extra_hosts:
       - 'host.docker.internal:host-gateway'
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+      args:
+        BUILD_CONFIG: development
+    ports:
+      - '4200:80'
+    depends_on:
+      - backend

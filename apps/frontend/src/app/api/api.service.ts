@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 import {
   DailyStat,
   DailyStatsQuery,
@@ -12,10 +13,12 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
+  private readonly base = environment.apiUrl;
+
   constructor(private readonly http: HttpClient) {}
 
   getMeta(): Observable<MetaResponse> {
-    return this.http.get<MetaResponse>('/api/meta');
+    return this.http.get<MetaResponse>(`${this.base}/api/meta`);
   }
 
   getDailyStats(query: DailyStatsQuery): Observable<PagedResponse<DailyStat>> {
@@ -26,14 +29,14 @@ export class ApiService {
       params = params.set(key, String(value));
     }
 
-    return this.http.get<PagedResponse<DailyStat>>('/api/daily-stats', { params });
+    return this.http.get<PagedResponse<DailyStat>>(`${this.base}/api/daily-stats`, { params });
   }
 
   getDaySummary(date: string): Observable<DaySummary> {
-    return this.http.get<DaySummary>(`/api/days/${date}/summary`);
+    return this.http.get<DaySummary>(`${this.base}/api/days/${date}/summary`);
   }
 
   getDayHours(date: string): Observable<DayHour[]> {
-    return this.http.get<DayHour[]>(`/api/days/${date}/hours`);
+    return this.http.get<DayHour[]>(`${this.base}/api/days/${date}/hours`);
   }
 }
