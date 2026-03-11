@@ -9,12 +9,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const logger = new Logger('Bootstrap');
 
-  app.enableCors({
-    origin: [
-      'http://localhost:4200',
-      'https://electricity-dashboard-frontend.onrender.com',
-    ],
-  });
+  app.enableCors();
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
