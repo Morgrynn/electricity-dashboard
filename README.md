@@ -24,50 +24,50 @@ electricity-dashboard/
 
 ### Stack
 
-* Backend: NestJS + PostgreSQL
-* Frontend: Angular
-* Browser E2E: Playwright
-* Backend HTTP E2E: Jest + supertest
-* Package management: pnpm workspaces
-* Container runtime: Docker Compose
+- Backend: NestJS + PostgreSQL
+- Frontend: Angular
+- Browser E2E: Playwright
+- Backend HTTP E2E: Jest + supertest
+- Package management: pnpm workspaces
+- Container runtime: Docker Compose
 
 ## Features implemented
 
 ### Daily statistics list
 
-* Daily electricity consumption
-* Daily electricity production
-* Average electricity price
-* Longest consecutive negative-price streak per day
-* Pagination
-* Sorting
-* Searching
-* Filtering
+- Daily electricity consumption
+- Daily electricity production
+- Average electricity price
+- Longest consecutive negative-price streak per day
+- Pagination
+- Sorting
+- Searching
+- Filtering
 
 ### Single day view
 
-* Daily summary metrics
-* Cheapest hours list
-* Max consumption vs production hour
-* Hourly price chart
-* Hourly consumption vs production chart
+- Daily summary metrics
+- Cheapest hours list
+- Max consumption vs production hour
+- Hourly price chart
+- Hourly consumption vs production chart
 
 ### Engineering extras
 
-* Backend Dockerfile
-* Full-stack Docker Compose setup
-* Health checks
-* Swagger / OpenAPI API documentation
-* Browser smoke E2E with Playwright
-* Backend HTTP E2E with Jest + supertest
+- Backend Dockerfile
+- Full-stack Docker Compose setup
+- Health checks
+- Swagger / OpenAPI API documentation
+- Browser smoke E2E with Playwright
+- Backend HTTP E2E with Jest + supertest
 
 ## Prerequisites
 
 Required for local development:
 
-* Node.js **20**
-* pnpm (via Corepack or installed directly)
-* Docker
+- Node.js **20**
+- pnpm (via Corepack or installed directly)
+- Docker
 
 Check versions:
 
@@ -91,12 +91,12 @@ docker compose up --build --renew-anon-volumes -d
 
 ### Adminer
 
-* URL: [http://localhost:8088/](http://localhost:8088/)
-* System: PostgreSQL
-* Server: `postgres`
-* Username: `academy`
-* Password: `academy`
-* Database: `electricity`
+- URL: [http://localhost:8088/](http://localhost:8088/)
+- System: PostgreSQL
+- Server: `postgres`
+- Username: `academy`
+- Password: `academy`
+- Database: `electricity`
 
 ### Database connection string
 
@@ -133,19 +133,19 @@ pnpm dev:backend
 
 Backend base URL:
 
-* [http://localhost:3000/api](http://localhost:3000/api)
+- [http://localhost:3000/api](http://localhost:3000/api)
 
 Useful endpoints:
 
-* `GET /api/health`
-* `GET /api/meta`
-* `GET /api/daily-stats`
-* `GET /api/days/:date/summary`
-* `GET /api/days/:date/hours`
+- `GET /api/health`
+- `GET /api/meta`
+- `GET /api/daily-stats`
+- `GET /api/days/:date/summary`
+- `GET /api/days/:date/hours`
 
 Swagger / OpenAPI docs:
 
-* [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
+- [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
 
 Examples:
 
@@ -165,7 +165,7 @@ pnpm dev:frontend
 
 Frontend URL:
 
-* [http://localhost:4200/](http://localhost:4200/)
+- [http://localhost:4200/](http://localhost:4200/)
 
 In development, the Angular proxy forwards `/api/*` to the backend.
 
@@ -186,7 +186,7 @@ curl http://localhost:3000/api/meta
 
 Swagger docs:
 
-* [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
+- [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
 
 Stop:
 
@@ -223,11 +223,11 @@ curl http://localhost:3000/api/meta
 
 Swagger docs:
 
-* [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
+- [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
 
 Open frontend:
 
-* [http://localhost:4200/](http://localhost:4200/)
+- [http://localhost:4200/](http://localhost:4200/)
 
 The nginx frontend container proxies `/api/*` to the backend container.
 
@@ -259,9 +259,9 @@ pnpm test:e2e:backend
 
 These tests validate HTTP behavior such as:
 
-* `400 Bad Request` for invalid dates
-* `404 Not Found` for missing day data
-* `200 OK` for valid hourly endpoint responses
+- `400 Bad Request` for invalid dates
+- `404 Not Found` for missing day data
+- `200 OK` for valid hourly endpoint responses
 
 ### Browser E2E
 
@@ -291,10 +291,10 @@ pnpm verify
 
 This runs:
 
-* lint
-* workspace tests
-* backend E2E
-* browser E2E
+- lint
+- workspace tests
+- backend E2E
+- browser E2E
 
 ## 7) Root scripts
 
@@ -323,12 +323,12 @@ The daily list endpoint supports pagination, sorting, searching, and filtering.
 
 `GET /api/days/:date/summary` returns:
 
-* daily total consumption
-* daily total production
-* average electricity price
-* longest negative price streak
-* max consumption vs production hour
-* cheapest hours
+- daily total consumption
+- daily total production
+- average electricity price
+- longest negative price streak
+- max consumption vs production hour
+- cheapest hours
 
 ### Hourly series
 
@@ -347,11 +347,11 @@ Example response item:
 
 Notes:
 
-* `startTime` is returned as an ISO UTC timestamp
-* `consumptionamount` is converted from kWh to MWh
-* missing values remain `null`
-* records are ordered by `startTime ASC`
-* the frontend renders chart hour labels in **Europe/Helsinki** local time
+- `startTime` is returned as an ISO UTC timestamp
+- `consumptionamount` is converted from kWh to MWh
+- missing values remain `null`
+- records are ordered by `startTime ASC`
+- the frontend renders chart hour labels in **Europe/Helsinki** local time
 
 ## 9) Manual verification
 
@@ -380,22 +380,40 @@ curl http://localhost:3000/api/days/2024-08-24/hours
 
 Check that:
 
-* `consumptionamount / 1000.0 = consumptionMWh`
-* `productionamount = productionMWh`
-* `hourlyprice = priceEurPerMWh`
+- `consumptionamount / 1000.0 = consumptionMWh`
+- `productionamount = productionMWh`
+- `hourlyprice = priceEurPerMWh`
 
 ## 10) Tradeoffs
 
-* SQL is written directly in the repository layer to keep the project simple and readable.
-* Shared mapping is used where it helps, but the code is not over-engineered.
-* The backend returns UTC times, while the frontend formats them for display.
-* Day endpoint validation and error responses are handled explicitly.
+- SQL is written directly in the repository layer to keep the project simple and readable.
+- Shared mapping is used where it helps, but the code is not over-engineered.
+- The backend returns UTC times, while the frontend formats them for display.
+- Day endpoint validation and error responses are handled explicitly.
 
 ## 11) Deployment
 
-The application was developed and tested locally and with Docker Compose. Cloud deployment is not included in this submission.
+The application is deployed to [Render](https://render.com) and publicly accessible:
+
+- **Frontend:** https://electricity-dashboard-frontend.onrender.com
+- **Backend:** https://electricity-dashboard-nbkq.onrender.com
+- **API docs:** https://electricity-dashboard-nbkq.onrender.com/api/docs
+
+### Services
+
+- **Frontend** — Angular app deployed as a Render Static Site, built with `pnpm --filter @app/frontend build`
+- **Backend** — NestJS app deployed as a Render Web Service, built with `pnpm --filter @app/backend build`
+- **Database** — PostgreSQL hosted on Render, seeded with the provided Fingrid/porssisahko.net dataset
+
+### Environment-aware API URLs
+
+The Angular app uses environment files to target the correct backend depending on the build configuration:
+
+- **Development** (`environment.ts`) — empty `apiUrl` so the nginx proxy forwards `/api/*` to the local backend container
+- **Production** (`environment.prod.ts`) — absolute `apiUrl` pointing to the Render backend
+
+The frontend Dockerfile accepts a `BUILD_CONFIG` build argument (`development` or `production`) so Docker Compose local builds use the development environment while Render builds use the production environment.
 
 ## 12) Use of AI tools
 
 Generative AI tools were used in a limited supporting role for reviewing code, refining tests, and drafting documentation. The core design, implementation, debugging, and integration work were completed manually.
-
